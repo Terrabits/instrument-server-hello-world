@@ -1,0 +1,10 @@
+plugins: {}
+devices:
+  instrument:
+    type:        socket
+    address:     192.168.1.101
+    port:        5025
+    timeout:     5
+# Translation Commands
+id_string?:
+  - instrument: "*IDN?"
