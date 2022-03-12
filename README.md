@@ -1,8 +1,10 @@
 # Instrument Server Hello World
 
-Instrument Server Hello World is an [instrument-server](https://github.com/Terrabits/instrument-server) project which implements only one command:
+Instrument Server Hello World is an [Instrument Server](https://github.com/Terrabits/instrument-server) microservice that implements one *trivial* command:
 
 `id_string?`
+
+This command returns the `*IDN?` response of a single, connected R&S Instrument.
 
 ## Requirements
 
@@ -82,26 +84,17 @@ id_string?:
   - instrument: "*IDN?"
 ```
 
-The key `id_string?` contains the command syntax. The trailing `?` indicates that this is a query. This syntax should look familiar to SCPI users.
+The key `'id_string?'` defines the command syntax. The trailing `?` indicates that this is a *query*. This convention should be familiar to SCPI users.
 
-### Optional: Input Argument(s)
+`Translation` query commands return the result of the last SCPI query.
 
-Note that `Translation` commands may include position-based input arguments. These inputs are available to the related SCPI commands via python `f-strings` syntax.
-
-Here is an example that configures two instruments, a Vector Signal Generator and a Vector Signal Analyzer, for a linear frequency sweep:
-
-```yaml
-set_points points:
-  - generator: 'SOUR:SWE:POIN {points}'
-  - analyzer:  'SENS:SWE:POIN {points}'
-```
+In the example above, there is only one SCPI command sent to `instrument`: `*IDN?`. The result of this query is returned by `id_string?`.
 
 ## Start
 
 Run `scripts/start` to serve `hello_world.yaml` on all network interfaces on port `9000`.
 
 `scripts/start` calls the `instrument-server` Command Line Interface (CLI), which provides additional settings.
-
 
 From `instrument-server --help`:
 
@@ -110,8 +103,7 @@ usage: instrument-server [-h] [--address ADDRESS] [--port PORT]
                          [--termination TERMINATION] [--debug-mode]
                          config_filename
 
-TCP server for controlling multiple instruments via a simplified SCPI
-interface
+Command Line Interface for starting Instrument Server microservices
 
 positional arguments:
   config_filename
@@ -128,9 +120,9 @@ optional arguments:
 
 ## Client Script
 
-The `client.py` script is provided for testing. It connects to the server, queries `id_string?` and prints the result.
+The `client.py` script is provided for testing. It connects to the Instrument Server Hello World microservice, queries `id_string?`, then prints the result.
 
-Here is an example that starts the server in the background, then runs `client.py`:
+`client.py` can be run from the command line as follows:
 
 ```shell
 scripts/start-in-background
@@ -140,6 +132,18 @@ scripts/start-in-background
 python client.py
 # => id_string?
 # => Rohde-Schwarz,ZNBT40-8Port,1332900244900059,3.15
+```
+
+## Next Steps: Input Arguments
+
+`Translation` commands may include position-based input arguments. These inputs are available to the associated SCPI commands via f-string syntax.
+
+Here is a hypothetical example of a `Translation` command that configures the power level of the `generator` and `analyzer`.
+
+```yaml
+set_power power_dBm:
+  - generator: 'SOUR:POW:POW     {power_dBm}'
+  - analyzer:  'DISP:TRAC:Y:RLEV {power_dBm}'
 ```
 
 ## References
