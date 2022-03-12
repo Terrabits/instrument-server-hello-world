@@ -142,8 +142,8 @@ Here is a hypothetical example of a `Translation` command that configures the po
 
 ```yaml
 set_power power_dBm:
-  - generator: 'SOUR:POW:POW     {power_dBm}'
-  - analyzer:  'DISP:TRAC:Y:RLEV {power_dBm}'
+  - generator: "SOUR:POW:POW     {power_dBm}"
+  - analyzer:  "DISP:TRAC:Y:RLEV {power_dBm}"
 ```
 
 ## References
