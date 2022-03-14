@@ -2,7 +2,7 @@ from socket import socket
 
 
 # constants
-SERVER_ADDRESS = ('192.168.1.101', 9000)
+SERVER_ADDRESS = ('localhost', 9000)
 
 # connect
 client = socket()
